@@ -2,7 +2,7 @@ CXX=g++
 CXXFLAG=-Wall -Wcast-align
 INCLUDE=
 OBJDIR=./src/
-OBJ=$(OBJDIR)ffxivlogparser.cpp
+OBJ=$(OBJDIR)*.cpp
 EXECDIR=./lib/
 EXECUTABLE=$(EXECDIR)ffxivlogparser.o
 
