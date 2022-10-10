@@ -1,5 +1,8 @@
 #include <fstream>
 #include <vector>
+#include <string.h>
+
+#include <iostream>
 
 #include "../include/logfile.h"
 
@@ -10,12 +13,23 @@ int32_t LogFile::ParseInt(std::ifstream& istream,int32_t seekPos){
 	return _intVal;
 };
 
-char* LogFile::ParseChar(std::ifstream& istream,int32_t seekPos,int32_t len){
+void LogFile::ParseChar(std::ifstream& istream,int32_t seekPos,int32_t len,char* charVal){
 // Parse message information that can be cast as char
-	char* charVal=new char[len]; // TODO : Add delete to this
+// TODO : rewrite this
+
+	char outChar[len];
+
 	istream.seekg(seekPos,istream.beg);
-	istream.read(charVal,len);
-	return charVal;
+	istream.read(outChar,len);
+	
+	strncpy(charVal,outChar,len);
+
+// TODO : check what triggers this error state
+	if(!istream){
+		std::cout<<"ERROR WHILE READING, BYTES READ: "<<istream.gcount()<<" RESETTING"<<'\n';
+		istream.clear();
+	};
+			
 };
 
 void LogFile::InitMsgStruct(std::vector<_Message>& msg,int32_t count){
@@ -30,7 +44,12 @@ void LogFile::ParseMsg(std::ifstream& istream,int32_t msgStart,int32_t seekPos,i
 	seekPos+=4;
 	msg[index].type=ParseInt(istream,msgStart+seekPos);
 	seekPos+=4;
-	msg[index].separator=ParseChar(istream,msgStart+seekPos,2);
+// TODO : rewrite this
+	char charVal[2];
+	ParseChar(istream,msgStart+seekPos,2,charVal);
+	msg[index].separator=charVal;
 	seekPos+=2;
-	msg[index].msg=ParseChar(istream,msgStart+seekPos,seekPos);
+	char charVal2[seekPos];
+	ParseChar(istream,msgStart+seekPos,seekPos,charVal2);
+	msg[index].msg=charVal2;
 };

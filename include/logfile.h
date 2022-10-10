@@ -17,7 +17,7 @@ public:
 std::vector<_Message> Msg;
 
 int32_t ParseInt(std::ifstream& istream,int32_t seekPos);
-char* ParseChar(std::ifstream& istream,int32_t seekPos,int32_t len);
+void ParseChar(std::ifstream& istream,int32_t seekPos,int32_t len,char* charVal);
 void InitMsgStruct(std::vector<_Message>& msg,int32_t count);
 void ParseMsg(std::ifstream& istream,int32_t msgStart,int32_t seekPos,int32_t index,std::vector<_Message>& msg);
 
