@@ -9,6 +9,8 @@
 
 A log parser with the aim to make the FFXIV character logs more human readable. Meant to read logs that are by default stored in Documents\My Games\FINAL FANTASY XIV - A Realm Reborn, where each character has its own FFXIV_CHR folder. These logs are not suitable for reliable battle data parsing.
 
+---
+
 #### Documentation
 
 More detailed documentation about the project can be found in the doc folder.
