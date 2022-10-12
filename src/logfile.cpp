@@ -24,6 +24,5 @@ void LogFile::InitMsgStruct(std::vector<_Message>& msg,int32_t count){
 
 void LogFile::ParseMsg(std::ifstream& istream,std::stringstream& log,int32_t msgStart,int32_t seekPos,std::vector<_Message>& msg){
 // Parse raw message contents
-// TODO : Consider renaming msg to something else to differentiate it from the struct msg
 	msg.push_back({ParseInt(istream,msgStart),ParseInt(istream,msgStart+4),ParseString(log,msgStart,2),ParseString(log,msgStart,seekPos)});
 };
