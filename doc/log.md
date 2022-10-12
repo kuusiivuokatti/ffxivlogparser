@@ -1,3 +1,5 @@
+### log.md
+
 1. [Structure](log.md#structure)
 2. [Reading](log.md#reading)
 3. [Issues](log.md#issues)
