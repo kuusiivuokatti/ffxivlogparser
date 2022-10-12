@@ -7,8 +7,8 @@
 
 #### Structure
 
-1. The header files are located in the [include](include/) folder
-2. The source code is located in the [src](src/) folder
+1. The header files are located in the [include](../include/) folder
+2. The source code is located in the [src](../src/) folder
 
 #### Files
 
