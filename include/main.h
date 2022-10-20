@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "logfile.h"
+#include "file.h"
 
 int main();
 

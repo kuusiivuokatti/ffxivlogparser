@@ -1,7 +1,7 @@
 #ifndef LOGFILE_H
 #define LOGFILE_H
 
-class LogFile{
+class File{
 
 private:
 int32_t _intVal; // TODO : Consider replacing this logic

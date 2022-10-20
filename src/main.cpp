@@ -9,7 +9,7 @@
 
 int main(){
 
-	LogFile log;
+	File log;
 	int32_t fileLen,contentLen,msgStart,msgCount,curPos,curMsgPos,curOffset;
 	std::vector<int32_t> msgOffset;
 	
