@@ -13,6 +13,6 @@
 #### Files
 
 1. main contains the opening and handling the output of the log file parsing
-2. logfile contains the log parsing logic
+2. file contains the log parsing logic
 
 ---
