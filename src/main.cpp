@@ -1,60 +1,51 @@
 #include <iostream>
-#include <fstream>
 #include <vector>
-#include <sstream>
+#include <filesystem>
 
 #include "../include/main.h"
-
-#define PATHLOG "../log/"
 
 int main(){
 
 	File log;
-	int32_t fileLen,contentLen,msgStart,msgCount,curPos,curMsgPos,curOffset;
-	std::vector<int32_t> msgOffset;
+
+	std::error_code errCode;
+	bool canExit=false;
+	std::string inDir;
+
+	do{
+		std::cout<<"Enter log file path (q to exit)\n";
+		std::cin>>inDir;
 	
-	std::ifstream istream(PATHLOG"00000000.log",std::fstream::binary);
+		if(std::filesystem::is_directory(inDir,errCode)){
+			std::cout<<"Directory set to: "<<inDir<<'\n';
+			for(const std::filesystem::directory_entry& inFile:std::filesystem::directory_iterator(inDir)){
+				if(log.CheckLogFileValidity(inFile)){
+					if(log.OpenLogFile(inFile)){
+						std::cout<<"File "<<inFile.path()<<" read succesfully\n";
+					};
+				}else{
+					std::cout<<inFile.path()<<" is not a valid log file, ignoring\n";
+				};
+			};
+			if(log.Msg.size()>0){
+				std::cout<<"Saving log output to file\n";
+				if(log.StoreFile(log.Msg)){
+					std::cout<<"File saved succesfully\n";
+				};
+			}else{
+				std::cout<<"No log files read\n";
+			};
 
-	if(istream.is_open()){
+			log.Msg.clear();
 
-		// Read the log in its entirety
-		std::stringstream logContent;
-		logContent<<istream.rdbuf();
-
-		// Get file and content lengths
-		fileLen=log.ParseInt(istream,4);
-		contentLen=log.ParseInt(istream,0);
-		msgStart=(fileLen-contentLen)*4+8;
-
-		// Read all the message offsets into a vector
-		curPos=8;
-		msgOffset.clear();
-		do{
-			msgOffset.push_back(log.ParseInt(istream,curPos));
-			curPos+=4;
-		}while(curPos<msgStart);
-		msgCount=msgOffset.size();
-		
-		std::cout<<"File length: "<<fileLen<<", content length: "<<contentLen<<", message start: "<<msgStart<<", message count: "<<msgCount<<'\n';
-
-		// Start going through the messages
-		log.InitMsgStruct(log.Msg,msgCount);
-		curMsgPos=msgStart;
-		curOffset=msgOffset[0];
-		for(int32_t i=0;i<msgCount;i++){
-					
-			if(i>0){curOffset=msgOffset[i]-msgOffset[i-1];};
-
-			log.ParseMsg(istream,logContent,curMsgPos,curOffset,log.Msg);
-			std::cout<<i<<" | "<<curMsgPos<<" | "<<msgOffset[i]<<" | "<<log.Msg[i].timestamp<<" | "<<log.Msg[i].type<<" | "<<log.Msg[i].separator<< " | "<<log.Msg[i].msg<<'\n';
-			curMsgPos=msgStart+msgOffset[i]; // Add current offset to the next message start 	
+		}else if(inDir=="q"){
+			std::cout<<"Exiting\n";
+			canExit=true;
+		}else{
+			std::cerr<<"Error while reading directory: "<<errCode.message()<<'\n';
 		};
-		
-		istream.close();
-
-	}else{
-		std::cout<<"File not open"<<std::endl;
-	}
+	}while(canExit==false);
 
 	return 0;
+
 };

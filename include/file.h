@@ -5,6 +5,7 @@ class File{
 
 private:
 int32_t _intVal; // TODO : Consider replacing this logic
+std::string _logSuffix=".log";
 
 struct _Message{
 	int32_t timestamp;
@@ -15,10 +16,11 @@ struct _Message{
 
 public:
 std::vector<_Message> Msg;
-
+bool CheckLogFileValidity(const std::filesystem::directory_entry& logFile);
+bool OpenLogFile(const std::filesystem::directory_entry& logFile);
+bool StoreFile(std::vector<_Message>& msg);
 int32_t ParseInt(std::ifstream& istream,int32_t seekPos);
 std::string ParseString(std::stringstream& log,int32_t seekPos,int32_t len);
-void InitMsgStruct(std::vector<_Message>& msg,int32_t count);
 void ParseMsg(std::ifstream& istream,std::stringstream& log,int32_t msgStart,int32_t seekPos,std::vector<_Message>& msg);
 
 };
