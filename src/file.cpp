@@ -8,7 +8,6 @@
 #include "../include/file.h"
 
 bool File::CheckLogFileValidity(const std::filesystem::directory_entry& inFile){
-// Check if the current file is valid before starting to try and read it
 
 	const std::string inFileStr=inFile.path().string();
 
@@ -21,42 +20,35 @@ bool File::CheckLogFileValidity(const std::filesystem::directory_entry& inFile){
 };
 
 bool File::OpenLogFile(const std::filesystem::directory_entry& inFile){
-// Open a single log file and go through each message
 
 	bool returnValue=true;
-	int32_t fileLen,contentLen,msgStart,msgCount,curPos,curMsgPos,curOffset;
-	std::vector<int32_t> msgOffset;
-	
 	std::ifstream istream(inFile.path().string(),std::fstream::binary);
 
 	if(istream.is_open()){
 
 		try{
-			// Read the log in its entirety
 			std::stringstream logContent;
 			logContent<<istream.rdbuf();
 
-			// Get file and content lengths
-			fileLen=ParseInt(istream,4);
-			contentLen=ParseInt(istream,0);
-			msgStart=(fileLen-contentLen)*4+8;
-
-			// Read all the message offsets into a vector
-			curPos=8;
+			int32_t fileLen=ParseInt(istream,4);
+			int32_t contentLen=ParseInt(istream,0);
+			int32_t msgStart=(fileLen-contentLen)*4+8;
+			
+			int32_t curPos=8;
+			std::vector<int32_t> msgOffset;
 			msgOffset.clear();
 			do{
 				msgOffset.push_back(ParseInt(istream,curPos));
 				curPos+=4;
 			}while(curPos<msgStart);
-			msgCount=msgOffset.size();
+			int32_t msgCount=msgOffset.size();
 
-			// Start going through the messages
-			curMsgPos=msgStart;
-			curOffset=msgOffset[0];
+			int32_t curMsgPos=msgStart;
+			int32_t curOffset=msgOffset[0];
 			for(int32_t i=0;i<msgCount;i++){
 				if(i>0){curOffset=msgOffset[i]-msgOffset[i-1];};
 				ParseMsg(istream,logContent,curMsgPos,curOffset,Msg);
-				curMsgPos=msgStart+msgOffset[i]; // Add current offset to the next message start 	
+				curMsgPos=msgStart+msgOffset[i];
 			};
 		}catch(const char* errMsg){
 			std::cerr<<"Error while parsing the log file "<<errMsg<<'\n';
@@ -75,8 +67,7 @@ bool File::OpenLogFile(const std::filesystem::directory_entry& inFile){
 };
 
 bool File::StoreFile(std::vector<_Message>& msg){
-// Store the vector contents into a file
-
+ 
 	std::ofstream outFile("./out.log");
 	
 	try{
@@ -95,19 +86,39 @@ bool File::StoreFile(std::vector<_Message>& msg){
 };
 
 int32_t File::ParseInt(std::ifstream& istream,int32_t seekPos){
-// Parse message information that can be cast as int
+	int32_t intVal;
 	istream.seekg(seekPos,istream.beg);
-	istream.read(reinterpret_cast<char*>(&_intVal),sizeof(int32_t));
-	return _intVal;
+	istream.read(reinterpret_cast<char*>(&intVal),sizeof(int32_t));
+	return intVal;
 };
 
 std::string File::ParseString(std::stringstream& log,int32_t seekPos,int32_t len){
-// Parse message information that can be cast as string
 	std::string strVal=log.str().substr(seekPos,len);
 	return strVal;
 };
 
+std::string File::ConvertTimestampToDateTime(int32_t timestamp){
+
+	time_t time=timestamp;
+	tm* ltm=localtime(&time);
+	std::stringstream timeSs;
+	timeSs<<1900+ltm->tm_year<<'-'
+		<<std::setfill('0')<<std::setw(2)<<1+ltm->tm_mon<<'-'
+		<<std::setfill('0')<<std::setw(2)<<ltm->tm_mday<<'|'
+		<<std::setfill('0')<<std::setw(2)<<ltm->tm_hour<<':'
+		<<std::setfill('0')<<std::setw(2)<<ltm->tm_min<<':'
+		<<std::setfill('0')<<std::setw(2)<<ltm->tm_sec;
+
+	std::string timeStr;
+	timeSs>>timeStr;
+
+	return timeStr;
+
+};
+
 void File::ParseMsg(std::ifstream& istream,std::stringstream& log,int32_t msgStart,int32_t seekPos,std::vector<_Message>& msg){
-// Parse raw message contents
-	msg.push_back({ParseInt(istream,msgStart),ParseInt(istream,msgStart+4),ParseString(log,msgStart,2),ParseString(log,msgStart,seekPos)});
+	msg.push_back({ConvertTimestampToDateTime(ParseInt(istream,msgStart)),
+	ParseInt(istream,msgStart+4),
+	ParseString(log,msgStart,2),
+	ParseString(log,msgStart,seekPos)});
 };
