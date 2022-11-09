@@ -1,17 +1,15 @@
 CXX=g++
 CXXFLAG=-Wall -Wcast-align
 
-#PROD
 INCLUDE=
 OBJDIR=./src/
 OBJ=$(OBJDIR)*.cpp
 EXECDIR=./lib/
 EXECUTABLE=$(EXECDIR)ffxivlogparser.o
 
-#TEST
 TESTINCLUDE=
 TESTOBJDIR=./test/
-TESTOBJ=$(TESTOBJDIR)*.cpp
+TESTOBJ=$(TESTOBJDIR)timestamp.cpp
 TESTEXECDIR=./lib/
 TESTEXECUTABLE=$(EXECDIR)test.o
 
