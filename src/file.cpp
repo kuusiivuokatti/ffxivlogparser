@@ -69,19 +69,20 @@ bool File::OpenLogFile(const std::filesystem::directory_entry& inFile){
 bool File::StoreFile(std::vector<_Message>& msg){
  
 	std::ofstream outFile("./out.log");
+	bool returnValue=true;
 	
 	try{
+		outFile<<_logHeader<<'\n';
 		for(auto const& it : msg){
 			outFile<<it.timestamp<<";"<<it.type<<";"<<it.separator<<";"<<it.msg<<'\n';
 		};
 	}catch(const char* errMsg){
 		std::cerr<<"Error when saving log output "<<errMsg<<'\n';
-		return false;
 	};
 
 	outFile.close();
 
-	return true;
+	return returnValue;
 
 };
 
@@ -104,7 +105,7 @@ std::string File::ConvertTimestampToDateTime(int32_t timestamp){
 	std::stringstream timeSs;
 	timeSs<<1900+ltm->tm_year<<'-'
 		<<std::setfill('0')<<std::setw(2)<<1+ltm->tm_mon<<'-'
-		<<std::setfill('0')<<std::setw(2)<<ltm->tm_mday<<'|'
+		<<std::setfill('0')<<std::setw(2)<<ltm->tm_mday<<';'
 		<<std::setfill('0')<<std::setw(2)<<ltm->tm_hour<<':'
 		<<std::setfill('0')<<std::setw(2)<<ltm->tm_min<<':'
 		<<std::setfill('0')<<std::setw(2)<<ltm->tm_sec;

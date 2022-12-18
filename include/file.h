@@ -5,6 +5,7 @@ class File{
 
 private:
 std::string _logSuffix=".log";
+std::string _logHeader="date;time;type;separator;message";
 
 struct _Message{
 	std::string timestamp;
