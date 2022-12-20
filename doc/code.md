@@ -10,6 +10,7 @@
 1. The header files are located in the [include](../include/) folder
 2. The source code is located in the [src](../src/) folder
 3. Test files are located in the [test](../test/) folder
+4. Runtime config files are located in the [config](../config) folder
 
 #### Files
 
