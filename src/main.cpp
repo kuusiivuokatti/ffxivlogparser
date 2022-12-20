@@ -4,6 +4,31 @@
 
 #include "../include/main.h"
 
+bool CheckConfig(){
+
+	bool returnValue=true;
+
+	int confFileCount=1;
+	std::string confDir="../config/"; // TODO : Consider making more easily maintainable
+	std::string confCollection[confFileCount];
+
+	confCollection[0]="type.map";
+
+	std::cout<<"Checking if config files exist\n";
+
+	for(int i=0;i<confFileCount;i++){
+		if(std::filesystem::exists(confDir+confCollection[i])){
+			std::cout<<confCollection[i]<<" found"<<'\n';
+		}else{
+			std::cout<<confCollection[i]<<" not found"<<'\n';
+			returnValue=false;
+		};
+	};
+
+	return returnValue;
+
+};
+
 int main(){
 
 	File log;
@@ -11,6 +36,13 @@ int main(){
 	std::error_code errCode;
 	bool canExit=false;
 	std::string inDir;
+
+	if(!CheckConfig()){
+		std::cout<<"Error when trying to look for config files, exiting\n";
+		return -1;
+	}else{
+		std::cout<<"Config files found\n";
+	};
 
 	do{
 		std::cout<<"Enter log file path (q to exit)\n";

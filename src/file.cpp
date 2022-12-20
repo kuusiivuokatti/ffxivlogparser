@@ -1,7 +1,6 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <string>
 #include <filesystem>
 #include <iostream>
 
@@ -15,7 +14,7 @@ bool File::CheckLogFileValidity(const std::filesystem::directory_entry& inFile){
 		return false;
 	}else{
 		return std::equal(inFileStr.begin()+inFileStr.size()-_logSuffix.size(),inFileStr.end(),_logSuffix.begin());
-	};	
+	};
 
 };
 
