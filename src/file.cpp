@@ -117,8 +117,9 @@ std::string File::ConvertTimestampToDateTime(int32_t timestamp){
 };
 
 void File::ParseMsg(std::ifstream& istream,std::stringstream& log,int32_t msgStart,int32_t seekPos,std::vector<_Message>& msg){
+	Config conf;
 	msg.push_back({ConvertTimestampToDateTime(ParseInt(istream,msgStart)),
-	ParseInt(istream,msgStart+4),
+	conf.MapType(ParseInt(istream,msgStart+4)),
 	ParseString(log,msgStart,2),
 	ParseString(log,msgStart,seekPos)});
 };
