@@ -16,5 +16,6 @@
 
 1. main contains the opening and handling the output of the log file parsing
 2. file contains the log parsing logic
+3. config contains runtime configuration files
 
 ---
