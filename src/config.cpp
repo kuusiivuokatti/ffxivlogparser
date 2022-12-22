@@ -6,7 +6,6 @@
 
 #include "../include/config.h"
 
-//extern std::map<int,std::string>TypeMap;
 std::map<int,std::string>TypeMap;
 
 bool Config::ReadConfigFile(){
@@ -35,7 +34,7 @@ bool Config::ReadConfigFile(){
 			try{
 				key=line.substr(0,line.find(';'));
 				value=line.substr(line.find(';')+1);
-				TypeMap.insert(std::pair<int,std::string>(std::stoi(key),value)); // TODO : Considering changing away from stoi
+				TypeMap.insert(std::pair<int,std::string>(std::stoi(key),value)); // TODO : Consider changing away from stoi
 			}catch(const char* errMsg){
 				std::cerr<<"Error parsing config file "<<confFileCollection[0]<<" ("<<errMsg<<")"<<'\n';
 			};
