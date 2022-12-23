@@ -1,4 +1,4 @@
-## ffxivlogparser (under development)
+## ffxivlogparser
 
 1. [About](README.md#about)
 2. [Documentation](README.md#documentation)
