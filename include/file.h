@@ -18,6 +18,7 @@ struct _Message{
 
 int32_t ParseInt(std::ifstream& istream,int32_t seekPos);
 std::string ParseString(std::stringstream& log,int32_t seekPos,int32_t len);
+std::string SanitizeString(std::string eraseVal,int eraseSize,std::string strVal);
 std::string ConvertTimestampToDateTime(int32_t timestamp);
 void ParseMsg(std::ifstream& istream,std::stringstream& log,int32_t msgStart,int32_t seekPos,std::vector<_Message>& msg);
 

@@ -93,7 +93,23 @@ int32_t File::ParseInt(std::ifstream& istream,int32_t seekPos){
 };
 
 std::string File::ParseString(std::stringstream& log,int32_t seekPos,int32_t len){
+	std::vector<std::pair<std::string,int>>vecErase;
+	vecErase.emplace_back("\r\n",2);
+	vecErase.emplace_back("\r",1);
+	vecErase.emplace_back("\n",1);
+
 	std::string strVal=log.str().substr(seekPos,len);
+	for(auto i:vecErase){
+		strVal=SanitizeString(i.first,i.second,strVal);
+	};
+	return strVal;
+};
+
+std::string File::SanitizeString(std::string eraseVal,int eraseSize,std::string strVal){
+	std::string::size_type i=0;
+	while((i=strVal.find(eraseVal,i))!=std::string::npos){
+		strVal.erase(i,eraseSize);
+	}
 	return strVal;
 };
 
